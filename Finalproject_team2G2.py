@@ -1,3 +1,4 @@
+
 import csv
 import os
 import sys
@@ -329,6 +330,7 @@ def generate_report_ui(user):
     print(f"Expenses: {report['total_expense']:.2f}")
     print(f"Net Savings: {report['net_savings']:.2f}")
 
+
     print("\nIncome Sources:")
     for source, amount in report['income_sources'].items():
         print(f"- {source}: {amount:.2f}")
@@ -340,6 +342,7 @@ def generate_report_ui(user):
     print("\nPayment Methods:")
     for mode, amount in report['payment_modes'].items():
         print(f"- {mode}: {amount:.2f}")
+    
 ##Transactio for admin 
 def report_transaction(user):
     month_input = input("Enter month (MM/YYYY) or leave blank: ")
@@ -504,3 +507,6 @@ def main():
 
 if __name__ == '__main__':
     main()  ## testing 
+
+    #hello
+    
