@@ -4378,3 +4378,4 @@ UserID,Date,Mode,Category,Subcategory,Note,Amount,Income/Expense,Currency
 2,12/04/2018,Cash,Hello,MU,SDfds,20.0,Expense,INR
 3,12/09/2003,Cash,sads,sdsf,dsa,210.0,Expense,INR
 3,12/12/2025,,Hello,,sdcs,30.0,Income,INR
+4,11/11/2025,aba,aba,aba,hello,1000.0,Expense,inr
