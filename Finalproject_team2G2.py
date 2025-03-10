@@ -382,7 +382,7 @@ def login():
     clear_screen()
     print("==== Login ====")
     username = input("Enter your Username: ").strip()
-    password = input("Enter Your Password: ").strip()
+    password = input("Enter your Password: ").strip()
     users = load_users()
     
     if not users:
@@ -461,8 +461,8 @@ def signup():
     clear_screen()
     print("==== Sign Up ====")
     fullname = input("Enter your full name: ").strip()
-    username = input("Enter Your username: ").strip()
-    password = input("Enter Your  password: ").strip()
+    username = input("Enter your username: ").strip()
+    password = input("Enter your  password: ").strip()
     users = load_users()
 
     if any(u.username == username for u in users):
