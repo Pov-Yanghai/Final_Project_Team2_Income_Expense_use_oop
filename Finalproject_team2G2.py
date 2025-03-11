@@ -467,7 +467,29 @@ def report_transaction(user):
     else:
         print("No transactions found")
 
-# delete transaction by id
+# delete transaction by date 
+def delete_transaction_by_date(date):
+    house_file = 'house.csv'
+    users_file = 'users.csv'
+    # 
+    def filter_transactions(file_path,date):
+        updated_rows = []
+        with open(file_path, 'r', newline='') as file:
+            reader = csv.reader(file)
+            header = next(reader)
+            updated_rows.append(header)
+            for row in reader:
+                if date not in row[1]:  # Assuming date is in the second column (MM/YYYY)
+                    updated_rows.append(row)
+        with open(file_path, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerows(updated_rows)
+    
+    filter_transactions(house_file,date)
+    filter_transactions(users_file, date)
+    print(f"Transactions from {date} have been deleted.")
+
+# delete user from transaction by id
 def delete_transaction_by_id(transaction_id):
     house_transactions = []
     users_transactions = []
@@ -516,10 +538,9 @@ def user_menu(user):
             print("1. View All Transactions")
             print("2. View User Transactions")
             print("3. System Statistics")
-            print("4. Delete Transaction")
+            print("4. Delete User From Transaction")
             print("5. Logout")
             choice = input("Choose option: ").strip()
-
             if choice == '1':
                 view_all_transactions()
             elif choice == '2':
@@ -545,7 +566,7 @@ def user_menu(user):
                 print("Invalid choice!")
         else:   ### if they are user not admin 
             print("1. Add Transaction")
-            print("2. View Monthly Report")
+            print("2. Update Transaction")
             print("3. View Monthly Report")
             print("4. View Transaction History")
             print("5. Delete Transaction")
@@ -561,8 +582,8 @@ def user_menu(user):
             elif choice == '4':
                 report_transaction(user)
             elif choice == "5":
-                transaction_id = input("Enter Transaction ID to delete: ")
-                delete_transaction_by_id(transaction_id)
+                date_to_delete = input("Enter the date (MM/YYYY) to delete transactions: ")
+                delete_transaction_by_date(date_to_delete)
             elif choice == '6':
                 break
             else:

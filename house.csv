@@ -4374,13 +4374,11 @@ UserID,Date,Mode,Category,Subcategory,Note,Amount,Income/Expense,Currency
 2,01/01/2015,Cash,Transportation,,share auto - hospital to brc station,10.0,Expense,INR
 2,12/09/2005,,Hello,,dcsd,120.0,Income,INR
 2,12/04/2018,Cash,Hello,MU,SDfds,20.0,Expense,INR
-3,12/09/2003,Cash,sads,sdsf,dsa,210.0,Expense,INR
-3,12/12/2025,,Hello,,sdcs,30.0,Income,INR
 5,10/03/2025,,double salary,,version 4.3,420.0,Income,dollar
 5,11/03/2025,,extra salary,,version4.2,230.0,Income,dollar
 5,12/03/2025,,salary extra,,version 4.1,250.0,Income,dollar
-5,10/03/2025,,Profit,,fx,400,Income,dollar
+5,10/03/2025,,Profit,,fx,400.0,Income,dollar
 5,10/03/2025,,salary,,none,200.0,Income,Dollar
-5,11/03/2025,bank,salary,none,version 4.5,300,Income,dollar
-5,11/03/2025,cash,drink,add extra meet,coffee,9,Expense,dollar
-
+5,11/03/2025,bank,salary,none,version 4.5,300.0,Income,dollar
+5,11/03/2025,cash,drink,add extra meet,coffee,9.0,Expense,dollar
+3,12/09/2003,Cash,sads,sdsf,dsa,210.0,Expense,INR
