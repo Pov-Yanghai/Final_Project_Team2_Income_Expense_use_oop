@@ -1,4 +1,3 @@
-
 import csv
 import os
 import sys
@@ -302,8 +301,83 @@ def check_input_month_and_year(input_string):
     except ValueError:
         return False
     
+#   update the transaction
+def update_transaction(user=None):
+    while True:
+        try:
+            date_inputed = input("Enter date (DD/MM/YYYY): ").strip()
+            category_inputed = input("Enter category: ").strip()
+            amount_inputed = float(input("Enter amount: "))
 
-### Report for users need to privde advise to user if they expsense money over the amount of income #### 
+            file_read = []
+            matched_row = None
+            match_index = -1
+
+            #Read all rows from file
+            with open('house.csv', 'r', newline='') as f_read:
+                reader = csv.reader(f_read)
+                file_read = list(reader)
+
+            #Search for matching row
+            for index, row in enumerate(file_read):
+                if len(row) < 8:
+                    continue  # skip incomplete rows
+
+                row_date = row[1].strip()
+                row_category = row[3].strip()
+                try:
+                    row_amount = float(row[6])
+                except:
+                    continue  # skip rows where amount is not a number
+
+                if row_date == date_inputed and row_category.lower() == category_inputed.lower() and row_amount == amount_inputed:
+                    matched_row = row
+                    match_index = index
+                    break
+
+            if matched_row:
+                print("\n===Transaction Found===")
+                print("---------------------------------------------------------------------------------")
+                print(" | ".join(matched_row))
+                print("---------------------------------------------------------------------------------")
+                # Take new input to update fields
+                print("->Leave blank will keep current value<-")
+
+                new_date = input(f"Update '{matched_row[1]}' to ?: ").strip()
+                new_category = input(f"Update '${matched_row[3]}' to ?: ").strip()
+                new_note = input(f"Update note '{matched_row[5]}' to ?: ")
+                new_amount = input(f"Update '{matched_row[6]}' to ?: ").strip()
+                new_inr = input(f"Update '{matched_row[8]}' to ?: ").strip()
+
+                if new_date:
+                    matched_row[1] = new_date
+                if new_category:
+                    matched_row[3] = new_category
+                if new_note:
+                    matched_row[5] = new_note
+                if new_amount:
+                    matched_row[6] = new_amount
+                if new_inr:
+                    matched_row[8] = new_inr
+                
+
+                #Replace the old row in file_read with updated row
+                file_read[match_index] = matched_row
+
+                #Write the updated data back to the file
+                with open('house.csv', 'w', newline='') as f_write:
+                    writer = csv.writer(f_write)
+                    writer.writerows(file_read)
+
+                print("\nTransaction have update.")
+                break
+            else:
+                print("\nMissing (Date,or  Category, orAmount). Please try again.\n")
+
+        except ValueError as ve:
+            print(f"Invalid input: {ve}. Try again.")
+        except Exception as e:
+            print(f"Unexpected error: {e}")
 
 def generate_report_ui(user):
     month_input = input("Enter month (MM/YYYY): ")
@@ -420,7 +494,7 @@ def login():
     clear_screen()
     print("==== Login ====")
     username = input("Enter your Username: ").strip()
-    password = input("Enter Your Password: ").strip()
+    password = input("Enter your Password: ").strip()
     users = load_users()
     
     if not users:
@@ -442,8 +516,8 @@ def user_menu(user):
             print("1. View All Transactions")
             print("2. View User Transactions")
             print("3. System Statistics")
-            print("5. Delete Transaction")
-            print("6. Logout")
+            print("4. Delete Transaction")
+            print("5. Logout")
             choice = input("Choose option: ").strip()
 
             if choice == '1':
@@ -462,31 +536,34 @@ def user_menu(user):
                 print(f"Total Users: {len(users)}")
                 print(f"Admins: {sum(1 for user in users if isinstance(user, Admin))}")
                 print(f"Regular Users: {sum(1 for user in users if not isinstance(user, Admin))}")
-            elif choice == "5":
+            elif choice == "4":
                 transaction_id = input("Enter Transaction ID to delete: ")
                 delete_transaction_by_id(transaction_id)
-            elif choice == '6':
+            elif choice == '5':
                 break
             else:
                 print("Invalid choice!")
         else:   ### if they are user not admin 
             print("1. Add Transaction")
             print("2. View Monthly Report")
-            print("3. View Transaction History")
-            print("4. Delete Transaction")
-            print("5. Logout")
+            print("3. View Monthly Report")
+            print("4. View Transaction History")
+            print("5. Delete Transaction")
+            print("6. Logout")
             choice = input("Choose option: ").strip()
 
             if choice == '1':
                 add_transaction(user)
             elif choice == '2':
-                generate_report_ui(user)
+                update_transaction(user)
             elif choice == '3':
+                generate_report_ui(user)
+            elif choice == '4':
                 report_transaction(user)
-            elif choice == "4":
+            elif choice == "5":
                 transaction_id = input("Enter Transaction ID to delete: ")
                 delete_transaction_by_id(transaction_id)
-            elif choice == '5':
+            elif choice == '6':
                 break
             else:
                 print("Invalid choice!")
@@ -507,8 +584,8 @@ def signup():
     clear_screen()
     print("==== Sign Up ====")
     fullname = input("Enter your full name: ").strip()
-    username = input("Enter Your username: ").strip()
-    password = input("Enter Your  password: ").strip()
+    username = input("Enter your username: ").strip()
+    password = input("Enter your  password: ").strip()
     users = load_users()
 
     if any(u.username == username for u in users):
@@ -550,7 +627,7 @@ def main():
             input("Press Enter to continue...")
 
 if __name__ == '__main__':
-    main()  ## testing 
+    main()  
+    ### Sina
 
-    
 
