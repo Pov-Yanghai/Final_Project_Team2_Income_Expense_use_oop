@@ -442,8 +442,8 @@ def user_menu(user):
             print("1. View All Transactions")
             print("2. View User Transactions")
             print("3. System Statistics")
-            print("4. Delete Transaction")
-            print("5. Logout")
+            print("5. Delete Transaction")
+            print("6. Logout")
             choice = input("Choose option: ").strip()
 
             if choice == '1':
@@ -462,10 +462,10 @@ def user_menu(user):
                 print(f"Total Users: {len(users)}")
                 print(f"Admins: {sum(1 for user in users if isinstance(user, Admin))}")
                 print(f"Regular Users: {sum(1 for user in users if not isinstance(user, Admin))}")
-            elif choice == "4":
+            elif choice == "5":
                 transaction_id = input("Enter Transaction ID to delete: ")
                 delete_transaction_by_id(transaction_id)
-            elif choice == '5':
+            elif choice == '6':
                 break
             else:
                 print("Invalid choice!")
