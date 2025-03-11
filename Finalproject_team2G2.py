@@ -392,6 +392,29 @@ def report_transaction(user):
         ## Toatal of transaction 
     else:
         print("No transactions found")
+
+# delete transaction by id
+def delete_transaction_by_id(transaction_id):
+    house_transactions = []
+    users_transactions = []
+    # read house.csv and filter out from the transaction
+    with open('house.csv',mode='r',newline='') as file:
+        reader = csv.reader(file)
+        house_transactions = [row for row in reader if row and row[0] != transaction_id]
+    # updated transactions back to house.csv
+    with open('house.csv',mode='w',newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(house_transactions)
+    # read users.csv and filter out the transaction
+    with open('users.csv',mode='r',newline='') as file:
+        reader = csv.reader(file)
+        users_transactions = [row for row in reader if row and row[0] != transaction_id]
+    #updated transactions back to users.csv
+    with open('users.csv',mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(users_transactions)
+    print(f"Transaction ID {transaction_id} deleted from Transaction")
+
 ## login () function 
 def login():
     clear_screen()
@@ -419,7 +442,8 @@ def user_menu(user):
             print("1. View All Transactions")
             print("2. View User Transactions")
             print("3. System Statistics")
-            print("4. Logout")
+            print("4. Delete Transaction")
+            print("5. Logout")
             choice = input("Choose option: ").strip()
 
             if choice == '1':
@@ -438,7 +462,10 @@ def user_menu(user):
                 print(f"Total Users: {len(users)}")
                 print(f"Admins: {sum(1 for user in users if isinstance(user, Admin))}")
                 print(f"Regular Users: {sum(1 for user in users if not isinstance(user, Admin))}")
-            elif choice == '4':
+            elif choice == "4":
+                transaction_id = input("Enter Transaction ID to delete: ")
+                delete_transaction_by_id(transaction_id)
+            elif choice == '5':
                 break
             else:
                 print("Invalid choice!")
@@ -446,7 +473,8 @@ def user_menu(user):
             print("1. Add Transaction")
             print("2. View Monthly Report")
             print("3. View Transaction History")
-            print("4. Logout")
+            print("4. Delete Transaction")
+            print("5. Logout")
             choice = input("Choose option: ").strip()
 
             if choice == '1':
@@ -455,7 +483,10 @@ def user_menu(user):
                 generate_report_ui(user)
             elif choice == '3':
                 report_transaction(user)
-            elif choice == '4':
+            elif choice == "4":
+                transaction_id = input("Enter Transaction ID to delete: ")
+                delete_transaction_by_id(transaction_id)
+            elif choice == '5':
                 break
             else:
                 print("Invalid choice!")
@@ -492,6 +523,7 @@ def signup():
     save_users(users)
     print("\nRegistration successful!")
     return new_user
+
 
 def main():
     while True:

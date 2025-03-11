@@ -1,7 +1,5 @@
 UserID,Date,Mode,Category,Subcategory,Note,Amount,Income/Expense,Currency
-2,12/21/2004 0:00,,By,,BY,200.0,Income,INR
 2,3/12/2007 0:00,,SDscf,,edsc,230.0,Income,INR
-2,20/09/2018 12:04:08,Cash,Transportation,Train,2 Place 5 to Place 0,30.0,Expense,INR
 2,20/09/2018 12:03:15,Cash,Food,snacks,Idli medu Vada mix 2 plates,60.0,Expense,INR
 2,17/09/2018 23:41:17,Saving Bank account 1,subscription,Mobile Service Provider,Data booster pack,19.0,Expense,INR
 2,16/09/2018 17:15:08,Cash,Festivals,Ganesh Pujan,Ganesh idol,251.0,Expense,INR
@@ -4376,6 +4374,3 @@ UserID,Date,Mode,Category,Subcategory,Note,Amount,Income/Expense,Currency
 2,01/01/2015,Cash,Transportation,,share auto - hospital to brc station,10.0,Expense,INR
 2,12/09/2005,,Hello,,dcsd,120.0,Income,INR
 2,12/04/2018,Cash,Hello,MU,SDfds,20.0,Expense,INR
-3,12/09/2003,Cash,sads,sdsf,dsa,210.0,Expense,INR
-3,12/12/2025,,Hello,,sdcs,30.0,Income,INR
-4,11/11/2025,aba,aba,aba,hello,1000.0,Expense,inr
