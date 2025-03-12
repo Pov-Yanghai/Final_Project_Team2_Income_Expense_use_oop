@@ -1,4 +1,3 @@
-
 import csv
 import os
 import sys
@@ -302,8 +301,83 @@ def check_input_month_and_year(input_string):
     except ValueError:
         return False
     
+#   update the transaction
+def update_transaction(user=None):
+    while True:
+        try:
+            date_inputed = input("Enter date (DD/MM/YYYY): ").strip()
+            category_inputed = input("Enter category: ").strip()
+            amount_inputed = float(input("Enter amount: "))
 
-### Report for users need to privde advise to user if they expsense money over the amount of income #### 
+            file_read = []
+            matched_row = None
+            match_index = -1
+
+            #Read all rows from file
+            with open('house.csv', 'r', newline='') as f_read:
+                reader = csv.reader(f_read)
+                file_read = list(reader)
+
+            #Search for matching row
+            for index, row in enumerate(file_read):
+                if len(row) < 8:
+                    continue  # skip incomplete rows
+
+                row_date = row[1].strip()
+                row_category = row[3].strip()
+                try:
+                    row_amount = float(row[6])
+                except:
+                    continue  # skip rows where amount is not a number
+
+                if row_date == date_inputed and row_category.lower() == category_inputed.lower() and row_amount == amount_inputed:
+                    matched_row = row
+                    match_index = index
+                    break
+
+            if matched_row:
+                print("\n===Transaction Found===")
+                print("---------------------------------------------------------------------------------")
+                print(" | ".join(matched_row))
+                print("---------------------------------------------------------------------------------")
+                # Take new input to update fields
+                print("->Leave blank will keep current value<-")
+
+                new_date = input(f"Update '{matched_row[1]}' to ?: ").strip()
+                new_category = input(f"Update '${matched_row[3]}' to ?: ").strip()
+                new_note = input(f"Update note '{matched_row[5]}' to ?: ")
+                new_amount = input(f"Update '{matched_row[6]}' to ?: ").strip()
+                new_inr = input(f"Update '{matched_row[8]}' to ?: ").strip()
+
+                if new_date:
+                    matched_row[1] = new_date
+                if new_category:
+                    matched_row[3] = new_category
+                if new_note:
+                    matched_row[5] = new_note
+                if new_amount:
+                    matched_row[6] = new_amount
+                if new_inr:
+                    matched_row[8] = new_inr
+                
+
+                #Replace the old row in file_read with updated row
+                file_read[match_index] = matched_row
+
+                #Write the updated data back to the file
+                with open('house.csv', 'w', newline='') as f_write:
+                    writer = csv.writer(f_write)
+                    writer.writerows(file_read)
+
+                print("\nTransaction have update.")
+                break
+            else:
+                print("\nMissing (Date,or  Category, orAmount). Please try again.\n")
+
+        except ValueError as ve:
+            print(f"Invalid input: {ve}. Try again.")
+        except Exception as e:
+            print(f"Unexpected error: {e}")
 
 def generate_report_ui(user):
     month_input = input("Enter month (MM/YYYY): ")
@@ -392,6 +466,51 @@ def report_transaction(user):
         ## Toatal of transaction 
     else:
         print("No transactions found")
+
+# delete transaction by date 
+def delete_transaction_by_date(date):
+    house_file = 'house.csv'
+    users_file = 'users.csv'
+    # 
+    def filter_transactions(file_path,date):
+        updated_rows = []
+        with open(file_path, 'r', newline='') as file:
+            reader = csv.reader(file)
+            header = next(reader)
+            updated_rows.append(header)
+            for row in reader:
+                if date not in row[1]:  # Assuming date is in the second column (MM/YYYY)
+                    updated_rows.append(row)
+        with open(file_path, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerows(updated_rows)
+    
+    filter_transactions(house_file,date)
+    filter_transactions(users_file, date)
+    print(f"Transactions from {date} have been deleted.")
+
+# delete user from transaction by id
+def delete_transaction_by_id(transaction_id):
+    house_transactions = []
+    users_transactions = []
+    # read house.csv and filter out from the transaction
+    with open('house.csv',mode='r',newline='') as file:
+        reader = csv.reader(file)
+        house_transactions = [row for row in reader if row and row[0] != transaction_id]
+    # updated transactions back to house.csv
+    with open('house.csv',mode='w',newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(house_transactions)
+    # read users.csv and filter out the transaction
+    with open('users.csv',mode='r',newline='') as file:
+        reader = csv.reader(file)
+        users_transactions = [row for row in reader if row and row[0] != transaction_id]
+    #updated transactions back to users.csv
+    with open('users.csv',mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(users_transactions)
+    print(f"Transaction ID {transaction_id} deleted from Transaction")
+
 ## login () function 
 def login():
     clear_screen()
@@ -419,9 +538,9 @@ def user_menu(user):
             print("1. View All Transactions")
             print("2. View User Transactions")
             print("3. System Statistics")
-            print("4. Logout")
+            print("4. Delete User From Transaction")
+            print("5. Logout")
             choice = input("Choose option: ").strip()
-
             if choice == '1':
                 view_all_transactions()
             elif choice == '2':
@@ -438,24 +557,34 @@ def user_menu(user):
                 print(f"Total Users: {len(users)}")
                 print(f"Admins: {sum(1 for user in users if isinstance(user, Admin))}")
                 print(f"Regular Users: {sum(1 for user in users if not isinstance(user, Admin))}")
-            elif choice == '4':
+            elif choice == "4":
+                transaction_id = input("Enter Transaction ID to delete: ")
+                delete_transaction_by_id(transaction_id)
+            elif choice == '5':
                 break
             else:
                 print("Invalid choice!")
         else:   ### if they are user not admin 
             print("1. Add Transaction")
-            print("2. View Monthly Report")
-            print("3. View Transaction History")
-            print("4. Logout")
+            print("2. Update Transaction")
+            print("3. View Monthly Report")
+            print("4. View Transaction History")
+            print("5. Delete Transaction")
+            print("6. Logout")
             choice = input("Choose option: ").strip()
 
             if choice == '1':
                 add_transaction(user)
             elif choice == '2':
-                generate_report_ui(user)
+                update_transaction(user)
             elif choice == '3':
-                report_transaction(user)
+                generate_report_ui(user)
             elif choice == '4':
+                report_transaction(user)
+            elif choice == "5":
+                date_to_delete = input("Enter the date (MM/YYYY) to delete transactions: ")
+                delete_transaction_by_date(date_to_delete)
+            elif choice == '6':
                 break
             else:
                 print("Invalid choice!")
@@ -493,6 +622,7 @@ def signup():
     print("\nRegistration successful!")
     return new_user
 
+
 def main():
     while True:
         clear_screen()
@@ -518,7 +648,7 @@ def main():
             input("Press Enter to continue...")
 
 if __name__ == '__main__':
-    main()  ## testing 
+    main()  
+    ### Sina
 
-    
 
