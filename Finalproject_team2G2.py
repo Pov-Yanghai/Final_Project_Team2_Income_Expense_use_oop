@@ -471,7 +471,7 @@ def report_transaction(user):
 def delete_transaction_by_date(date):
     house_file = 'house.csv'
     users_file = 'users.csv'
-    # 
+    # filter_transactions
     def filter_transactions(file_path,date):
         updated_rows = []
         with open(file_path, 'r', newline='') as file:
@@ -479,7 +479,8 @@ def delete_transaction_by_date(date):
             header = next(reader)
             updated_rows.append(header)
             for row in reader:
-                if date not in row[1]:  # Assuming date is in the second column (MM/YYYY)
+                # date is in the first column (MM/YYYY)
+                if date not in row[0]:  
                     updated_rows.append(row)
         with open(file_path, 'w', newline='') as file:
             writer = csv.writer(file)
@@ -538,7 +539,7 @@ def user_menu(user):
             print("1. View All Transactions")
             print("2. View User Transactions")
             print("3. System Statistics")
-            print("4. Delete User From Transaction")
+            print("4. Delete User From System")
             print("5. Logout")
             choice = input("Choose option: ").strip()
             if choice == '1':
@@ -582,7 +583,7 @@ def user_menu(user):
             elif choice == '4':
                 report_transaction(user)
             elif choice == "5":
-                date_to_delete = input("Enter the date (MM/YYYY) to delete transactions: ")
+                date_to_delete = input("Enter the date (DD/MM/YYYY) to delete transactions: ")
                 delete_transaction_by_date(date_to_delete)
             elif choice == '6':
                 break
