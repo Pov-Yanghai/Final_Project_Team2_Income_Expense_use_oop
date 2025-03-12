@@ -3318,6 +3318,19 @@ UserID,Date,Mode,Category,Subcategory,Note,Amount,Income/Expense,Currency
 0002,01/01/2015,Cash,Transportation,,bus - brc to Place H,30.0,Expense,INR
 0002,01/01/2015,Cash,Transportation,,share auto - hospital to brc station,10.0,Expense,INR
 0002,12/09/2005,,Hello,,fsd,20.0,Income,INR
+5,10/03/2025,,double salary,,version 4.3,420.0,Income,dollar
+5,11/03/2025,,extra salary,,version4.2,230.0,Income,dollar
+5,12/03/2025,,salary extra,,version 4.1,250.0,Income,dollar
+5,10/03/2025,,Profit,,fx,400.0,Income,dollar
+5,10/03/2025,,salary,,none,200.0,Income,Dollar
+5,11/03/2025,bank,salary,none,version 4.5,300.0,Income,dollar
+5,11/03/2025,cash,drink,add extra meet,coffee,9.0,Expense,dollar
+2,10/02/2016,Saving Bank account 1,Investment,Mutual fund,Mutual fund C,1000.0,Expense,INR
+2,08/02/2016,Saving Bank account 1,Investment,Mutual fund,Mutual fund B,1000.0,Expense,INR
+2,08/02/2016,Saving Bank account 1,subscription,Mobile Service Provider,Mobile Service Provider recharge wfh,251.0,Expense,INR
+2,07/02/2016,Cash,Food,Grocery,,160.0,Expense,INR
+2,05/02/2016,Saving Bank account 1,Investment,Mutual fund,Mutual fund A,1000.0,Expense,INR
+2,01/02/2016,Saving Bank account 1,Investment,Public Provident Fund,,10000.0,Expense,INR
 2,21/12/2004,,By,,BY,200.0,Income,INR
 2,19/09/2018,Saving Bank account 1,subscription,Netflix,1 month subscription,199.0,Expense,INR
 2,13/09/2018,Saving Bank account 1,Small cap fund 1,,,5000.0,Expense,INR
@@ -4347,10 +4360,4 @@ UserID,Date,Mode,Category,Subcategory,Note,Amount,Income/Expense,Currency
 2,01/01/2015,Cash,Transportation,,share auto - hospital to brc station,10.0,Expense,INR
 2,12/09/2005,,Hello,,dcsd,120.0,Income,INR
 2,12/04/2018,Cash,Hello,MU,SDfds,20.0,Expense,INR
-5,10/03/2025,,double salary,,version 4.3,420.0,Income,dollar
-5,11/03/2025,,extra salary,,version4.2,230.0,Income,dollar
-5,12/03/2025,,salary extra,,version 4.1,250.0,Income,dollar
-5,10/03/2025,,Profit,,fx,400.0,Income,dollar
-5,10/03/2025,,salary,,none,200.0,Income,Dollar
-5,11/03/2025,bank,salary,none,version 4.5,300.0,Income,dollar
-5,11/03/2025,cash,drink,add extra meet,coffee,9.0,Expense,dollar
+2,12/03/2025,,Hello,,Nham by,1000.0,Income,US
