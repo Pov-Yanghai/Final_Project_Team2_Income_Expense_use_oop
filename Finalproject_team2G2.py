@@ -496,6 +496,7 @@ def delete_transaction_by_date(date):
         
     house_deleted = filter_transactions(house_file,date)
     users_deleted = filter_transactions(users_file,date)
+    
     if house_deleted or users_deleted:
         print(f"Transactions from {date} have been deleted successfully.")
     else:
