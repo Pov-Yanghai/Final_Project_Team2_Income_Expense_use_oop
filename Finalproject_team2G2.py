@@ -471,25 +471,32 @@ def report_transaction(user):
 def delete_transaction_by_date(date):
     house_file = 'house.csv'
     users_file = 'users.csv'
-    # filter_transactions
-    def filter_transactions(file_path,date):
+    
+    def filter_transactions(file_path, date):
         updated_rows = []
+        deleted = False
         with open(file_path, 'r', newline='') as file:
             reader = csv.reader(file)
             header = next(reader)
             updated_rows.append(header)
             for row in reader:
-                # date is in the first column (MM/YYYY)
-                if date not in row[0]:  
+                # date is in the first column (DD/MM/YY)
+                if date in row[0]: 
+                    deleted = True
+                else:
                     updated_rows.append(row)
         with open(file_path, 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerows(updated_rows)
+        return deleted
     
-    filter_transactions(house_file,date)
-    filter_transactions(users_file, date)
-    print(f"Transactions from {date} have been deleted.")
-
+    deleted_house = filter_transactions(house_file, date)
+    deleted_users = filter_transactions(users_file, date)
+    
+    if deleted_house or deleted_users:
+        print(f"Transactions from {date} have been deleted.")
+    else:
+        print(f"No transactions found for {date}.")
 # delete user from transaction by id
 def delete_transaction_by_id(transaction_id):
     house_transactions = []
