@@ -1,3 +1,4 @@
+import re
 import csv
 import os
 import sys
@@ -268,21 +269,21 @@ def add_transaction(user):  ## ## completed function add transaction to user
 
         if trans_type == "Income":
             transaction = Income(
-                amount=amount,
-                date=parsed_date,
-                source=category,
-                description=note,
-                currency=currency
+                amount = amount,
+                date = parsed_date,
+                source = category,
+                description = note,
+                currency = currency
             )
         else:
             transaction = Expense(
-                amount=amount,
-                date=parsed_date,
-                category=category,
-                subcategory=subcategory,
-                mode=mode,
-                description=note,
-                currency=currency
+                amount = amount,
+                date = parsed_date,
+                category = category,
+                subcategory = subcategory,
+                mode = mode,
+                description = note,
+                currency = currency
             )
 
         user.add_transaction(transaction)
@@ -292,11 +293,11 @@ def add_transaction(user):  ## ## completed function add transaction to user
         print(f"\nInvalid input: {error_message}")
     except Exception as error_message:
         print(f"\nError: {error_message}")
-## check input correct for mat 
+## Check input correct format 
 def check_input_month_and_year(input_string):
     try:
-        ## using the `strptime` method of `datetime` to convert the string into a datetime object.
-        datetime.strptime(input_string, "%m/%Y")## format to input months and year
+        ## using the `strptime` method of `datetime` to convert the string into a datetime object
+        datetime.strptime(input_string, "%m/%Y") ## format to input months and year
         return True
     except ValueError:
         return False
@@ -528,8 +529,8 @@ def delete_transaction_by_id(transaction_id):
 def login():
     clear_screen()
     print("==== Login ====")
-    username = input("Enter your Username: ").strip()
-    password = input("Enter your Password: ").strip()
+    username = input("Enter your username: ").strip()
+    password = input("Enter your password: ").strip()
     users = load_users()
     
     if not users:
@@ -538,16 +539,18 @@ def login():
 
     for user in users:
         if user.username == username and user.verify_password(password):
-            print(f"\nLogin successful! Welcome {username} ({user.role})")
+            print(f"\nLogin successfully! Welcome {username} ({user.role})")
             return user
     print("\nInvalid username or password")
+    input("Press any key to continue...")
     return None
 ## user menu for user interface that user can choose option  
 def user_menu(user):
     while True:
         clear_screen()
         print(f"\n=== Welcome {user.username} ===")
-        if isinstance(user, Admin):   ## if they admin admin's interface 
+        # Admin's menu
+        if isinstance(user, Admin):
             print("1. View All Transactions")
             print("2. View User Transactions")
             print("3. System Statistics")
@@ -577,7 +580,8 @@ def user_menu(user):
                 break
             else:
                 print("Invalid choice!")
-        else:   ### if they are user not admin 
+        # User's menu
+        else:
             print("1. Add Transaction")
             print("2. Update Transaction")
             print("3. View Monthly Report")
@@ -613,17 +617,50 @@ def view_all_transactions():
             print(f"Error reading transactions: {e}")
     else:
         print("No transactions found!")
-## sign up function for user to sign up 
+def is_valid_password(password):
+    if len(password) < 8:
+        return "Password must be at least 8 characters long."
+    if not any(char.isupper() for char  in password):
+        return "Password must contain at least one uppercase letter."
+    if not any(char.islower() for char in password):
+        return "Password must contain at least one lowercase letter."
+    if not any(char.isdigit() for char in password):
+        return "Password must contain at least one digit."
+    if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
+        return "Password must contain at least one special character."
+    return None 
+# Signup for new user
 def signup():
     clear_screen()
     print("==== Sign Up ====")
-    fullname = input("Enter your full name: ").strip()
+    while True:
+        fullname = input("Enter your full name: ").strip() # Using strip() to remove unwant space
+        if not re.match("^[A-Za-z ]+$", fullname):
+            print("Do not put any digit or special characters.")
+        elif len(fullname) > 30:
+            print("Your full name is too long! Please enter a name with 30 characters or fewer.")
+        elif len(fullname) == 0:
+            print("Full name cannot be empty. Please enter your name.")
+        else:
+            break
     username = input("Enter your username: ").strip()
-    password = input("Enter your  password: ").strip()
+    while True:
+        password = input("Enter your password: ").strip()
+        error = is_valid_password(password)
+        if error:
+            print(f"Invalid password: {error}")
+        else:
+            while True:
+                confirm_password = input("Confirm password: ")
+                if confirm_password == password:
+                    break
+                else:
+                    print("Password do not match! Please try again.")
+            break
     users = load_users()
-
     if any(u.username == username for u in users):
         print("Username already exists!")
+        input("Press any key to continue...")
         return None
 ## increase id for each user after they input 
     existing_ids = [int(u.user_id) for u in users if u.user_id.isdigit()]
