@@ -303,7 +303,7 @@ def check_input_month_and_year(input_string):
     
 #   update the transaction
 def update_transaction(user=None):
-    
+    while True:
         try:
             date_inputed = input("Enter date (DD/MM/YYYY): ").strip()
             category_inputed = input("Enter category: ").strip()
@@ -370,6 +370,7 @@ def update_transaction(user=None):
                     writer.writerows(file_read)
 
                 print("\nTransaction have update.")
+                break
             else:
                 print("\nMissing (Date,or  Category, orAmount). Please try again.\n")
 
