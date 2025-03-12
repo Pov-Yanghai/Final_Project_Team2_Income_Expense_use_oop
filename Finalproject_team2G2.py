@@ -474,29 +474,33 @@ def delete_transaction_by_date(date):
     
     def filter_transactions(file_path, date):
         updated_rows = []
-        deleted = False
+        deleted = False 
         with open(file_path, 'r', newline='') as file:
             reader = csv.reader(file)
             header = next(reader)
             updated_rows.append(header)
             for row in reader:
-                # date is in the first column (DD/MM/YY)
-                if date in row[0]: 
-                    deleted = True
+                # date is in the second column (DD/MM/YY)
+                if date in row[1]: 
+                    deleted = True 
                 else:
                     updated_rows.append(row)
-        with open(file_path, 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerows(updated_rows)
-        return deleted
-    
-    deleted_house = filter_transactions(house_file, date)
-    deleted_users = filter_transactions(users_file, date)
-    
-    if deleted_house or deleted_users:
-        print(f"Transactions from {date} have been deleted.")
+        if deleted:
+            with open(file_path, 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerows(updated_rows)
+            # Successfully deleted
+            return True 
+        else:
+            return False 
+        
+    house_deleted = filter_transactions(house_file,date)
+    users_deleted = filter_transactions(users_file,date)
+    if house_deleted or users_deleted:
+        print(f"Transactions from {date} have been deleted successfully.")
     else:
         print(f"No transactions found for {date}.")
+
 # delete user from transaction by id
 def delete_transaction_by_id(transaction_id):
     house_transactions = []
@@ -590,7 +594,7 @@ def user_menu(user):
             elif choice == '4':
                 report_transaction(user)
             elif choice == "5":
-                date_to_delete = input("Enter the date (DD/MM/YYYY) to delete transactions: ")
+                date_to_delete = input("Enter the date (MM/YYYY) to delete transactions: ")
                 delete_transaction_by_date(date_to_delete)
             elif choice == '6':
                 break
