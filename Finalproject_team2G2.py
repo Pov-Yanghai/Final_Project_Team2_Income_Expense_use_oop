@@ -1,3 +1,4 @@
+import re 
 import csv
 import os
 import sys
@@ -753,19 +754,52 @@ def view_all_transactions():
             print(f"Error reading transactions: {e}")
     else:
         print("No transactions found!")
-## sign up function for user to sign up 
+
+## check password 
+def is_valid_password(password):
+    if len(password) < 8:
+        return "Password must be at least 8 characters long."
+    if not any(char.isupper() for char  in password):
+        return "Password must contain at least one uppercase letter."
+    if not any(char.islower() for char in password):
+        return "Password must contain at least one lowercase letter."
+    if not any(char.isdigit() for char in password):
+        return "Password must contain at least one digit."
+    if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
+        return "Password must contain at least one special character."
+    return None 
+# Signup for new user
 def signup():
     clear_screen()
-    print("\n" + "="*39) 
-    print("\n=============== Sign Up ===============\n")
-    print("="*39) 
-    fullname = input("Enter your full name: ").strip()
+    print("==== Sign Up ====")
+    while True:
+        fullname = input("Enter your full name: ").strip() # Using strip() to remove unwant space
+        if not re.match("^[A-Za-z ]+$", fullname):
+            print("Do not put any digit or special characters.")
+        elif len(fullname) > 30:
+            print("Your full name is too long! Please enter a name with 30 characters or fewer.")
+        elif len(fullname) == 0:
+            print("Full name cannot be empty. Please enter your name.")
+        else:
+            break
     username = input("Enter your username: ").strip()
-    password = input("Enter your  password: ").strip()
+    while True:
+        password = input("Enter your password: ").strip()
+        error = is_valid_password(password)
+        if error:
+            print(f"Invalid password: {error}")
+        else:
+            while True:
+                confirm_password = input("Confirm password: ")
+                if confirm_password == password:
+                    break
+                else:
+                    print("Password do not match! Please try again.")
+            break
     users = load_users()
-
     if any(u.username == username for u in users):
         print("Username already exists!")
+        input("Press any key to continue...")
         return None
 ## increase id for each user after they input 
     existing_ids = [int(u.user_id) for u in users if u.user_id.isdigit()]
@@ -776,7 +810,6 @@ def signup():
     save_users(users)
     print("\nRegistration successful!")
     return new_user
-
 
 def main():
     while True:
