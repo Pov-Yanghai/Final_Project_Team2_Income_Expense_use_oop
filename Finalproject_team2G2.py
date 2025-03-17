@@ -668,6 +668,7 @@ def login():
     
     if not users:
         print("No users found. Please sign up first.")
+        input()
         return None
 
     for user in users:
@@ -675,6 +676,7 @@ def login():
             print(f"\nLogin successful! Welcome {username} ({user.role})")
             return user
     print("\nInvalid username or password")
+    input()
     return None
 ## user menu for user interface that user can choose option  
 def user_menu(user):
