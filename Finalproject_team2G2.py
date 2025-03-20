@@ -633,27 +633,39 @@ def delete_transaction_by_date(date):
     else:
         print(f"No transactions found for {date}.")
 
+
 # delete user from transaction by id
 def delete_transaction_by_id(transaction_id):
-    house_transactions = []
-    users_transactions = []
-    # read house.csv and filter out from the transaction
-    with open('house.csv',mode='r',newline='') as file:
+    house_deleted = False
+    users_deleted = False
+    # Read house.csv and filter out the transaction
+    with open('house.csv', mode='r', newline='') as file:
         reader = csv.reader(file)
-        house_transactions = [row for row in reader if row and row[0] != transaction_id]
-    # updated transactions back to house.csv
-    with open('house.csv',mode='w',newline='') as file:
+        house_transactions = [row for row in reader]
+    updated_house_transactions = [row for row in house_transactions if row and row[0] != transaction_id]
+    if len(updated_house_transactions) < len(house_transactions):
+        house_deleted = True
+    # Update house.csv
+    with open('house.csv', mode='w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerows(house_transactions)
-    # read users.csv and filter out the transaction
-    with open('users.csv',mode='r',newline='') as file:
+        writer.writerows(updated_house_transactions)
+    # Read users.csv and filter out the transaction
+    with open('users.csv', mode='r', newline='') as file:
         reader = csv.reader(file)
-        users_transactions = [row for row in reader if row and row[0] != transaction_id]
-    #updated transactions back to users.csv
-    with open('users.csv',mode='w', newline='') as file:
+        users_transactions = [row for row in reader]
+    updated_users_transactions = [row for row in users_transactions if row and row[0] != transaction_id]
+
+    if len(updated_users_transactions) < len(users_transactions):
+        users_deleted = True
+    # Update users.csv
+    with open('users.csv', mode='w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerows(users_transactions)
-    print(f"Transaction ID {transaction_id} deleted from Transaction")
+        writer.writerows(updated_users_transactions)
+    # Print appropriate message
+    if house_deleted or users_deleted:
+        print(f"Transaction ID {transaction_id} deleted successfully.")
+    else:
+        print(f"Transaction ID {transaction_id} not found.")
 
 ## login () function 
 def login():
