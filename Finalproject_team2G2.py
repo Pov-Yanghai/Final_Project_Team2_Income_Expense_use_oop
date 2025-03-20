@@ -562,7 +562,7 @@ def generate_report_ui(user):
     
 ##Transactio for admin 
 def report_transaction(user):
-    month_input = input("Enter month (MM/YYYY) or leave blank: ")
+    month_input = input("Enter month (MM/YYYY) or leave blank to See all transactions: ")
     transactions = user.get_transactions()
     
     if month_input:
@@ -682,9 +682,9 @@ def login():
 def user_menu(user):
     while True:
         clear_screen()
-        print("\n"+"="*35)
+        print("\n"+"="*38)
         print(f"\n========== Welcome {user.username} ==========\n")
-        print("="*35)
+        print("="*38)
         if isinstance(user, Admin):   ## if they admin admin's interface 
             print("1. View All Transactions")
             print("2. View User Transactions")
@@ -773,7 +773,9 @@ def is_valid_password(password):
 # Signup for new user
 def signup():
     clear_screen()
-    print("==== Sign Up ====")
+    print("\n" + "="*39) 
+    print("\n=============== Sign Up ===============")
+    print("\n" + "="*39) 
     while True:
         fullname = input("Enter your full name: ").strip() # Using strip() to remove unwant space
         if not re.match("^[A-Za-z ]+$", fullname):
