@@ -10,8 +10,18 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 plt.style.use('seaborn-v0_8-darkgrid')
 ## ----------------------
-## FIle store users infromation for admin 
+## FIle store users infromation for admin and users
+DATA_FOLDER= "data"
 USER_FILE = "users.csv"
+HOUSE_FILE = "house.csv"
+## Ensure it exists to correct directory structure 
+def ensure_folders_exist():
+    os.makedirs(DATA_FOLDER, exist_ok=True)
+def get_house_file_path():
+    return os.path.join(DATA_FOLDER, HOUSE_FILE)
+
+def get_user_file_path():
+    return os.path.join(DATA_FOLDER, USER_FILE)
 ### clear system easy for testing 
 def clear_screen():
     if sys.platform.startswith('win'):
@@ -98,7 +108,7 @@ class User:
         self._password = password
         self.role = role
         self._transactions = []
-        self._filename = "house.csv"
+        self._filename = get_house_file_path()
         self._load_transactions()
     ### Graph for user bar chart( compare their expense and income monthly and pie chart show what they get income and expsense monthly)
     def generate_user_graphs(self):
@@ -246,9 +256,9 @@ class User:
                     'Currency': transaction.currency
                 }
                 new_data.append(entry)## Add Transaction to list new_data
-
-            if os.path.exists(self._filename): ## Check if file already exists
-                existing_df = pd.read_csv(self._filename, dtype={'UserID': str}) ## Read existing file ensure no duplicate
+            house_path = get_house_file_path()
+            if os.path.exists(house_path): ## Check if file already exists
+                existing_df = pd.read_csv(house_path, dtype={'UserID': str}) ## Read existing file ensure no duplicate
                 new_df = pd.DataFrame(new_data, columns=columns)## Create Data Frame for new trasaction
                 combined_df = pd.concat([existing_df, new_df])  ## merge new and existing transaction 
                 combined_df = combined_df.drop_duplicates( ## Drop dupplicate transaction 
@@ -287,13 +297,14 @@ class Admin(User):
     ## show admin activity each user 
     def generate_admin_graphs(self):
         """Generate admin analytics dashboard with enhanced visuals"""
-        if not os.path.exists("house.csv"):
+        house_path = get_house_file_path()
+        if not os.path.exists(house_path):
             print("No transactions found!")
             return
         
         try:
             # Load and process the data
-            df = pd.read_csv("house.csv", parse_dates=['Date'], dayfirst=True, infer_datetime_format=True)
+            df = pd.read_csv(house_path, parse_dates=['Date'], dayfirst=True, infer_datetime_format=True)
             df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y', errors='coerce')
             df = df.dropna(subset=['Date'])
             df['Month'] = df['Date'].dt.to_period('M')
@@ -334,9 +345,10 @@ class Admin(User):
             print(f"Error generating admin graphs: {e}")
 def load_users():   ## ## load users  completely function to load users from user.csv file
     users = []
-    if os.path.exists(USER_FILE):
+    user_path = get_user_file_path()
+    if os.path.exists(user_path):
         try:
-            with open(USER_FILE, 'r') as file:
+            with open(user_path, 'r') as file:
                 reader = csv.DictReader(file)
                 for row in reader:
                     try:
@@ -369,7 +381,8 @@ def load_users():   ## ## load users  completely function to load users from use
 ## Save user name to user.csv file    file store only information users.csv 
 def save_users(users):
     try:
-        with open(USER_FILE, 'w', newline='') as file:
+        user_path = get_user_file_path()
+        with open(user_path, 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(["UserID", "Full Name", "Username", "Password", "Role"])
             for user in users:
@@ -440,12 +453,13 @@ def update_transaction(user=None):
             category_inputed = input("Enter category: ").strip()
             amount_inputed = float(input("Enter amount: "))
 
+            house_path = get_house_file_path()
             file_read = []
             matched_row = None
             match_index = -1
 
             #Read all rows from file
-            with open('house.csv', 'r', newline='') as f_read:
+            with open(house_path, 'r', newline='') as f_read:
                 reader = csv.reader(f_read)
                 file_read = list(reader)
 
@@ -496,7 +510,7 @@ def update_transaction(user=None):
                 file_read[match_index] = matched_row
 
                 #Write the updated data back to the file
-                with open('house.csv', 'w', newline='') as f_write:
+                with open(house_path, 'w', newline='') as f_write:
                     writer = csv.writer(f_write)
                     writer.writerows(file_read)
 
@@ -600,8 +614,8 @@ def report_transaction(user):
 
 # delete transaction by date 
 def delete_transaction_by_date(date):
-    house_file = 'house.csv'
-    users_file = 'users.csv'
+    house_file = get_house_file_path()
+    users_file = get_user_file_path()
     
     def filter_transactions(file_path, date):
         updated_rows = []
@@ -636,21 +650,23 @@ def delete_transaction_by_date(date):
 
 # delete user from transaction by id
 def delete_transaction_by_id(transaction_id):
+    house_path = get_house_file_path()
+    users_path = get_user_file_path()
     house_deleted = False
     users_deleted = False
     # Read house.csv and filter out the transaction
-    with open('house.csv', mode='r', newline='') as file:
+    with open(house_path, mode='r', newline='') as file:
         reader = csv.reader(file)
         house_transactions = [row for row in reader]
     updated_house_transactions = [row for row in house_transactions if row and row[0] != transaction_id]
     if len(updated_house_transactions) < len(house_transactions):
         house_deleted = True
     # Update house.csv
-    with open('house.csv', mode='w', newline='') as file:
+    with open(house_path, mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerows(updated_house_transactions)
     # Read users.csv and filter out the transaction
-    with open('users.csv', mode='r', newline='') as file:
+    with open(users_path, mode='r', newline='') as file:
         reader = csv.reader(file)
         users_transactions = [row for row in reader]
     updated_users_transactions = [row for row in users_transactions if row and row[0] != transaction_id]
@@ -658,7 +674,7 @@ def delete_transaction_by_id(transaction_id):
     if len(updated_users_transactions) < len(users_transactions):
         users_deleted = True
     # Update users.csv
-    with open('users.csv', mode='w', newline='') as file:
+    with open(users_path, mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerows(updated_users_transactions)
     # Print appropriate message
@@ -759,9 +775,10 @@ def user_menu(user):
         input("\nPress Enter to continue...")
 ## view all transaction for admin 
 def view_all_transactions():
-    if os.path.exists("house.csv"):
+    house_path = get_house_file_path()
+    if os.path.exists(house_path):
         try:
-            df = pd.read_csv("house.csv", dtype={'UserID': str})
+            df = pd.read_csv(house_path, dtype={'UserID': str})
             print("\nAll Transactions:")
             print(df.to_string(index=False))
         except Exception as e:
@@ -828,6 +845,7 @@ def signup():
     return new_user
 
 def main():
+    ensure_folders_exist()
     while True:
         clear_screen()
         print("\n" + "="*50)

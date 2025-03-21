@@ -1,0 +1,59 @@
+-Python Libraries:
+csv: For reading/writing CSV files
+os & sys: For file/system operations
+re: For password validation regex
+datetime: For date handling
+abc: For abstract base classes
+-Data Handling:
+pandas: For DataFrame operations and CSV parsing
+-Visualization:
+matplotlib: For creating charts/graphs
+seaborn: For enhanced visualization styling
+
+#Dependencies: 
+pandas==2.0.3
+seaborn==0.12.2
+matplotlib==3.7.2
+python-dateutil==2.8.2
+
+
+#Install Dependencies:
+
+pip install -r requirements.txt
+
+# Libraries
+# ====================================================
+import os                # File/directory operations
+import re                # Regex for input validation
+import csv               # CSV file handling
+from datetime import datetime  # Date operations
+import pandas as pd      # Data manipulation/analysis
+import seaborn as sns    # Visualization
+import matplotlib.pyplot as plt  # Plotting
+from abc import ABC, abstractmethod  # Abstract classes
+
+
+# Data Sturture
+# =======================================================
+class Transaction(ABC)          # Abstract base class
+class Income(Transaction)       # Income transaction model
+class Expense(Transaction)      # Expense transaction model
+class Report_To_User            #Report To user if user expsense more than income 
+class User                      # Base user model
+class Admin(User)               # Admin subclass
+
+
+
+# System Components
+# ========================================================
+def load_users()                # User data loader
+def save_users()                # User data saver
+def add_transaction()           # Transaction creation
+def generate_report_ui()        # Report generator
+def user_menu()                 # User interface
+def login()                     # Auth system
+def signup()                    # User registration
+def update_transaction()        # Update transaction
+def delete_transaction_by_date()#Delete transaction by date 
+
+
