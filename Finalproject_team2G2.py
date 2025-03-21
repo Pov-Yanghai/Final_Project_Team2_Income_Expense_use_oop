@@ -562,7 +562,7 @@ def generate_report_ui(user):
     
 ##Transactio for admin 
 def report_transaction(user):
-    month_input = input("Enter month (MM/YYYY) or leave blank to See all transactions: ")
+    month_input = input("Enter month (MM/YYYY) or leave blank to See all transaction: ")
     transactions = user.get_transactions()
     
     if month_input:
