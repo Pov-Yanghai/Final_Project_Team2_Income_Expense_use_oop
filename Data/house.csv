@@ -3322,8 +3322,5 @@ UserID,Date,Mode,Category,Subcategory,Note,Amount,Income/Expense,Currency
 2,01/01/2015,Cash,Transportation,,share auto - Place H to Place T base,20.0,Expense,INR
 2,01/01/2015,Cash,Transportation,,bus - brc to Place H,30.0,Expense,INR
 2,01/01/2015,Cash,Transportation,,share auto - hospital to brc station,10.0,Expense,INR
-3,21/03/2025,,Hello,,8,8.0,Income,$
-4,21/03/2025,ABA,FOod,Hello,By chay,5.0,Expense,$
 4,12/03/2025,,Hello,,NH'',100.0,Income,$
 4,12/03/2025,,Transportation,,20,20.0,Income,$
-4,21/03/2025,ABA,Food,Her Corner,20,20.0,Expense,$

@@ -764,7 +764,7 @@ def user_menu(user):
             elif choice == '4':
                 report_transaction(user)
             elif choice == "5":
-                date_to_delete = input("Enter the date (MM/YYYY) to delete transactions: ")
+                date_to_delete = input("Enter the date (DD/MM/YYYY) to delete transactions: ")
                 delete_transaction_by_date(date_to_delete)
             elif choice == '6':
                 user.generate_user_graphs()
