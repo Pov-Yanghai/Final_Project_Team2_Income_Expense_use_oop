@@ -10,7 +10,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 plt.style.use('seaborn-v0_8-darkgrid')
 ## ----------------------
-## FIle store users infromation for admin and users
+## FIle store users infromation for admin and users  
 DATA_FOLDER= "data"
 USER_FILE = "users.csv"
 HOUSE_FILE = "house.csv"
@@ -579,6 +579,7 @@ def report_transaction(user):
     month_input = input("Enter month (MM/YYYY) or leave blank to See all transaction: ")
     transactions = user.get_transactions()
     
+    
     if month_input:
         if not check_input_month_and_year(month_input):
             print("Invalid month format. Please try again.")
@@ -764,7 +765,7 @@ def user_menu(user):
             elif choice == '4':
                 report_transaction(user)
             elif choice == "5":
-                date_to_delete = input("Enter the date (DD/MM/YYYY) to delete transactions: ")
+                date_to_delete = input("Enter the date (MM/YYYY) to delete transactions: ")
                 delete_transaction_by_date(date_to_delete)
             elif choice == '6':
                 user.generate_user_graphs()
@@ -776,16 +777,30 @@ def user_menu(user):
 ## view all transaction for admin 
 def view_all_transactions():
     house_path = get_house_file_path()
-    if os.path.exists(house_path):
-        try:
-            df = pd.read_csv(house_path, dtype={'UserID': str})
-            print("\nAll Transactions:")
-            print(df.to_string(index=False))
-        except Exception as e:
-            print(f"Error reading transactions: {e}")
-    else:
+    if not os.path.exists(house_path):
         print("No transactions found!")
+        return
+    try:
+        # Read the CSV with error handling
+        df = pd.read_csv(house_path, dtype={'UserID': str}, encoding='utf-8', on_bad_lines="skip")
+        # Check if DataFrame is empty
+        if df.empty:
+            print("No transactions recorded yet.")
+            return
+        ##Print the total number of rows
+        print(f"Total Transactions: {len(df)} Transactions.")
 
+        # Ensure Pandas displays all rows
+        pd.set_option('display.max_rows', None)
+        pd.set_option('display.max_columns', None)
+        print("\nAll Transactions:")
+        print(df.to_string(index=False))
+    except pd.errors.EmptyDataError:
+        print("The transaction file is empty.")
+    except pd.errors.ParserError:
+        print("Error parsing the transaction file. Please check its format.")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
 ## check password 
 def is_valid_password(password):
     if len(password) < 8:
