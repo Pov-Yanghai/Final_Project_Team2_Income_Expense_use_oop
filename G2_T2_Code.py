@@ -112,7 +112,7 @@ class User:
         self._load_transactions()
     ### Graph for user bar chart( compare their expense and income monthly and pie chart show what they get income and expsense monthly)
     def generate_user_graphs(self):
-        """Generate financial graphs for regular users with enhanced visuals"""
+        """Financial graphs for regular users with enhanced visuals"""
         month_input = input("Enter month (MM/YYYY): ")
         if not check_input_month_and_year(month_input):
             print("Invalid month format! Use MM/YYYY")
@@ -124,7 +124,7 @@ class User:
             if t.date.month == target_month.month
             and t.date.year == target_month.year
         ]
-        
+
         if not filtered:
             print("No transactions found for this month")
             return
@@ -296,7 +296,7 @@ class Admin(User):
         super().__init__(user_id, fullname, username, password, role="Admin")
     ## show admin activity each user 
     def generate_admin_graphs(self):
-        """Generate admin analytics dashboard with enhanced visuals"""
+        """admin analytics dashboard with enhanced visuals"""
         house_path = get_house_file_path()
         if not os.path.exists(house_path):
             print("No transactions found!")
