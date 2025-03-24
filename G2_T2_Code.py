@@ -8,6 +8,7 @@ import pandas as pd
 ## library for graph visualization
 import seaborn as sns 
 import matplotlib.pyplot as plt
+
 plt.style.use('seaborn-v0_8-darkgrid')
 ## ----------------------
 ## FIle store users infromation for admin and users  
@@ -517,7 +518,7 @@ def update_transaction(user=None):
                 print("\nTransaction have update.")
                 break
             else:
-                print("\nMissing (Date,or  Category, orAmount). Please try again.\n")
+                print("\nMissing (Date, or  Category, or Amount). Please try again.\n")
 
         except ValueError as ve:
             print(f"Invalid input: {ve}. Try again.")
